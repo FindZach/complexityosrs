@@ -2,6 +2,7 @@ package gg.rsmod.plugins.api
 
 import gg.rsmod.game.fs.def.EnumDef
 import gg.rsmod.game.model.World
+import java.lang.Math.ceil
 
 /**
  * @author Tom <rspsmods@gmail.com>
@@ -34,6 +35,15 @@ object Skills {
 
     const val MIN_COMBAT_LVL = 3
     const val MAX_COMBAT_LVL = 126
+
+    fun isSuccess(playerSkillLevel: Int, levelRequired: Int): Boolean {
+        val level = playerSkillLevel
+        val req = levelRequired.toDouble()
+        val successChance = kotlin.math.ceil((level * 50.0 - req * 15.0) / req / 3.0 * 4.0)
+        val roll = (1..99).random()
+        return (successChance >= roll)
+
+    }
 
     fun getSkillName(world: World, skill: Int): String {
         val enum = world.definitions.get(EnumDef::class.java, 680)

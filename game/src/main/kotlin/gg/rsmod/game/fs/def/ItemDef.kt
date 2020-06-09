@@ -21,7 +21,7 @@ class ItemDef(override val id: Int) : Definition(id) {
     /**
      * The item can be traded through the grand exchange.
      */
-    var grandExchange = false
+    var grandExchange = true
     var teamCape = 0
     /**
      * When an item is noted or unnoted (and has a noted variant), this will
@@ -43,7 +43,7 @@ class ItemDef(override val id: Int) : Definition(id) {
      * Custom metadata.
      */
     var examine: String? = null
-    var tradeable = false
+    var tradeable = true //TODO: UPDATE AT A LATER POINT BACK TO FALSE
     var weight = 0.0
     var attackSpeed = -1
     var equipSlot = -1
@@ -93,7 +93,9 @@ class ItemDef(override val id: Int) : Definition(id) {
                     groundMenu[opcode - 30] = null
                 }
             }
-            in 35 until 40 -> inventoryMenu[opcode - 35] = buf.readString()
+            in 35 until 40 -> {
+                inventoryMenu[opcode - 35] = buf.readString()
+            }
             40 -> {
                 val count = buf.readUnsignedByte()
 
@@ -144,6 +146,10 @@ class ItemDef(override val id: Int) : Definition(id) {
                     equipmentMenu[i] = option
                 }
             }
+        }
+        if (name.equals("coins", true)) {
+            println("COINS FOUND!!! $name")
+            inventoryMenu[2] = "Add to Pouch";
         }
     }
 }

@@ -111,9 +111,17 @@ class DefinitionSet {
 
         val definitions = Int2ObjectOpenHashMap<T?>(files.size + 1)
         for (i in 0 until files.size) {
+            if (i == 995) {
+
+            }
             val def = createDefinition(type, files[i].fileId, files[i].contents)
             definitions[files[i].fileId] = def
+
+            if (def.id == 995 && type == ItemDef::class.java) {
+                println("WE FOUND THE COINS AGAIN IN THE AREA WHERE THE CACHE IS BEING READ")
+            }
         }
+
         defs[type] = definitions
     }
 

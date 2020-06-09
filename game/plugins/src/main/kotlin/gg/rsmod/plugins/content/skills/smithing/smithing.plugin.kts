@@ -77,6 +77,7 @@ standardAnvils.forEach { anvil ->
 
                 // Open the smithing interface
                 openSmithingInterface(player, def!!)
+
             }
         }
     }

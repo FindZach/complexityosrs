@@ -36,7 +36,7 @@ abstract class PlayerSerializerService : Service {
     fun configureNewPlayer(client: Client, request: LoginRequest) {
         client.attr.put(NEW_ACCOUNT_ATTR, true)
 
-        client.passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt(16))
+        client.passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt(10))
         client.tile = startTile
     }
 

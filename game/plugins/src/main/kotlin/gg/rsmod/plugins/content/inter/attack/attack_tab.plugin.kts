@@ -40,7 +40,7 @@ on_button(interfaceId = 593, component = 29) {
 /**
  * Toggle special attack.
  */
-on_button(interfaceId = 593, component = 35) {
+on_button(interfaceId = 593, component = 36) {
     player.toggleVarp(AttackTab.SPECIAL_ATTACK_VARP)
 }
 

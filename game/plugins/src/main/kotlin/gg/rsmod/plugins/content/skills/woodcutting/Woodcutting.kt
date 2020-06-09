@@ -6,6 +6,7 @@ import gg.rsmod.game.model.entity.GameObject
 import gg.rsmod.game.model.entity.Player
 import gg.rsmod.game.model.queue.QueueTask
 import gg.rsmod.plugins.api.Skills
+import gg.rsmod.plugins.api.cfg.Items
 import gg.rsmod.plugins.api.ext.*
 
 /**
@@ -41,6 +42,15 @@ object Woodcutting {
                 p.playSound(3600)
                 p.inventory.add(tree.log)
                 p.addXp(Skills.WOODCUTTING, tree.xp)
+
+                /**
+                 * Infernal Axe ability
+                 */
+                val chanceOfBurningLogOnCut = (1..3).random()
+                if (axe.item == Items.INFERNAL_AXE && chanceOfBurningLogOnCut == 3) {
+                    p.inventory.remove(tree.log)
+                    p.addXp(Skills.FIREMAKING, tree.firemakingXp)
+                }
 
                 if (p.world.random(tree.depleteChance) == 0) {
                     p.animate(-1)

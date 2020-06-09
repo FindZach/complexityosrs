@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.api.ext
 
+import IfSetObjectsMessage
 import com.google.common.primitives.Ints
 import gg.rsmod.game.fs.def.ItemDef
 import gg.rsmod.game.fs.def.VarbitDef
@@ -11,6 +12,7 @@ import gg.rsmod.game.model.bits.BitStorage
 import gg.rsmod.game.model.bits.StorageBits
 import gg.rsmod.game.model.container.ContainerStackType
 import gg.rsmod.game.model.container.ItemContainer
+import gg.rsmod.game.model.entity.GroundItem
 import gg.rsmod.game.model.entity.Player
 import gg.rsmod.game.model.interf.DisplayMode
 import gg.rsmod.game.model.item.Item
@@ -46,6 +48,17 @@ fun Player.openShop(shop: String) {
         runClientScript(1074, 13, s.name)
     } else {
         World.logger.warn { "Player \"$username\" is unable to open shop \"$shop\" as it does not exist." }
+    }
+}
+
+/**
+ * Attempts to add an item to use inventory; if inventory is full; the item will be dropped.
+ */
+fun Player.addOrDrop(item: Item) {
+    val transaction = inventory.add(item = item.id, amount = item.amount, assureFullInsertion = false, forceNoStack = false, beginSlot = 1) // should probably allow these to be specified as params
+    if (transaction.getLeftOver() > 0) {
+        val groundItem = GroundItem(item = item.id, amount = transaction.getLeftOver(), tile = tile, owner = this)
+        world.spawn(groundItem)
     }
 }
 
@@ -87,6 +100,10 @@ fun Player.setComponentHidden(interfaceId: Int, component: Int, hidden: Boolean)
 
 fun Player.setComponentItem(interfaceId: Int, component: Int, item: Int, amountOrZoom: Int) {
     write(IfSetObjectMessage(hash = ((interfaceId shl 16) or component), item = item, amount = amountOrZoom))
+}
+
+fun Player.setComponentItems(interfaceId: Int, component: Int, item: IntArray, amountOrZoom: IntArray) {
+    write(IfSetObjectsMessage(hash = ((interfaceId shl 16) or component), item = item, amount = amountOrZoom))
 }
 
 fun Player.setComponentNpcHead(interfaceId: Int, component: Int, npc: Int) {

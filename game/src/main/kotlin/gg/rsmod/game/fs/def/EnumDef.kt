@@ -38,6 +38,7 @@ class EnumDef(override val id: Int) : Definition(id) {
                 }
             }
         }
+        //println("[Debug] EnumDef: KeyType: $keyType -- valueType: $valueType String: $defaultString defaultInt: $defaultInt")
     }
 
     fun getInt(key: Int): Int = values[key] as? Int ?: defaultInt

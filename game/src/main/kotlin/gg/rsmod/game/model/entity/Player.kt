@@ -5,10 +5,7 @@ import gg.rsmod.game.fs.def.VarpDef
 import gg.rsmod.game.message.Message
 import gg.rsmod.game.message.impl.*
 import gg.rsmod.game.model.*
-import gg.rsmod.game.model.attr.CURRENT_SHOP_ATTR
-import gg.rsmod.game.model.attr.LEVEL_UP_INCREMENT
-import gg.rsmod.game.model.attr.LEVEL_UP_OLD_XP
-import gg.rsmod.game.model.attr.LEVEL_UP_SKILL_ID
+import gg.rsmod.game.model.attr.*
 import gg.rsmod.game.model.container.ItemContainer
 import gg.rsmod.game.model.container.key.BANK_KEY
 import gg.rsmod.game.model.container.key.ContainerKey
@@ -235,13 +232,12 @@ open class Player(world: World) : Pawn(world) {
 
     suspend fun forceMove(task: QueueTask, movement: ForcedMovement, cycleDuration: Int = movement.maxDuration / 30) {
         movementQueue.clear()
-        lock = LockState.DELAY_ACTIONS
 
+        lock = LockState.DELAY_ACTIONS
         lastTile = Tile(tile)
         moveTo(movement.finalDestination)
 
         forceMove(movement)
-
         task.wait(cycleDuration)
         lock = LockState.NONE
     }
@@ -446,6 +442,17 @@ open class Player(world: World) : Pawn(world) {
             val def = item.getDef(world.definitions)
             def.bonuses.forEachIndexed { index, bonus -> equipmentBonuses[index] += bonus }
         }
+    }
+
+    /**
+     * Function used to detect if user is in DebugMode
+     */
+    fun inDebugMode(): Boolean {
+        val debugMode = AttributeKey<Boolean>("debugMode") // Attribute will save on logout
+        if (attr[debugMode] == true) {
+            return true;
+        }
+        return false;
     }
 
     fun addXp(skill: Int, xp: Double) {

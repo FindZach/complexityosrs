@@ -11,8 +11,9 @@ import gg.rsmod.plugins.content.combat.formula.MeleeCombatFormula
 import gg.rsmod.plugins.content.combat.formula.RangedCombatFormula
 import gg.rsmod.plugins.content.combat.getCombatTarget
 import gg.rsmod.plugins.content.inter.bank.openBank
+import gg.rsmod.plugins.content.inter.emotes.EmotesTab
 import gg.rsmod.plugins.content.magic.MagicSpells
-import net.runelite.cache.definitions.ItemDefinition
+import org.fz.complexity.util.UtilMethod
 import java.text.DecimalFormat
 
 on_command("max") {
@@ -45,12 +46,22 @@ on_command("empty") {
     player.inventory.removeAll()
 }
 
+on_command("dptest") {
+   // player.setComponentItems(265, 115, intArrayOf(995, 1042, 1044), intArrayOf(1, 1, 1))
+    player.runClientScript(920, 5)
+}
+
 on_command("debug", Privilege.ADMIN_POWER) {
     val debugMode = AttributeKey<Boolean>("debugMode") // Attribute will save on logout
 
-    val currentMode = player.attr.get(debugMode);
+    UtilMethod.getItemsByName(player,"partyhat")
+
+    val currentMode = player.attr[debugMode];
     player.attr[debugMode] = currentMode != true
     player.message("Debug mode: " + player.attr[debugMode]);
+
+    player.openInterface(interfaceId = 646, dest = InterfaceDestination.MAIN_SCREEN)
+    player.setComponentText(646, 87, "<col=255>Attack</col>")
 }
 
 on_command("reboot", Privilege.ADMIN_POWER) {
